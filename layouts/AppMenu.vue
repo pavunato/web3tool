@@ -47,10 +47,7 @@ const menuOptions: MenuOption[] = [
             RouterLink,
             {
               to: {
-                name: 'hash',
-                params: {
-                  lang: 'en-US'
-                }
+                name: 'index'
               }
             },
             { default: () => 'ABI Encoder' }
@@ -64,10 +61,7 @@ const menuOptions: MenuOption[] = [
             RouterLink,
             {
               to: {
-                name: 'signature',
-                params: {
-                  lang: 'en-US'
-                }
+                name: 'signature'
               }
             },
             { default: () => 'Sign thing' }
