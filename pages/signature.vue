@@ -1,5 +1,5 @@
 <template>
-  <n-card title="Sign Thing" style="margin-bottom: 16px">
+  <n-card title="Sign Thing">
     <n-space vertical>
       <n-input v-model:value="randomAddress"
                type="text" placeholder="Input Private Key">
@@ -16,8 +16,8 @@
       </n-input>
     </n-space>
 
-    <n-space justify="space-between">
-      <n-tabs type="line" animated>
+    <n-space vertical>
+      <n-tabs type="line" animated pane-style="max-width: 800px">
         <n-tab-pane name="manual" tab="Message">
           <n-space vertical>
             <n-input v-model:value="messageInput" type="text" placeholder="Message to sign" />
@@ -26,8 +26,8 @@
 <!--        <n-tab-pane name="parse" tab="Typed Data">-->
 <!--          Sign Typed Data-->
 <!--        </n-tab-pane>-->
-        <n-tab-pane name="pack" tab="Packed Keccak 256">
-          PackedKeccak256
+        <n-tab-pane name="pack" tab="EncodePacked">
+          packedKeccak256
           <manual-a-b-i :pack-type="'keccak'" @packed="(msg) => messageInput = msg"/>
         </n-tab-pane>
       </n-tabs>
@@ -68,7 +68,6 @@ import {ref} from 'vue'
 import {generatePrivateKey, privateKeyToAccount} from 'viem/accounts'
 import {createWalletClient, http, toBytes} from 'viem'
 import {mainnet} from 'viem/chains'
-import hljs from "highlight.js/lib/core";
 
   const client = createWalletClient({
     chain: mainnet,
