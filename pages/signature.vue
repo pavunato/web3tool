@@ -8,7 +8,7 @@
         </template>
       </n-input>
       <n-input v-model:value="privateKey" type="text" placeholder="Input Private Key"
-               :status="!isValidPrivateKey ? 'error' : ''"
+               :status="!isValidPrivateKey ? 'error' : 'success'"
       >
         <template #prefix>
           <b>Private Key:</b>

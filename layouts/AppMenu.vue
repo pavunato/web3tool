@@ -33,7 +33,7 @@ import {h} from 'vue'
 import {NIcon, NSpace, NSwitch, NLayout, NLayoutSider, NMenu} from 'naive-ui'
 import type {MenuOption} from 'naive-ui'
 import {BookmarkOutline, CaretDownOutline, BarcodeOutline} from '@vicons/ionicons5'
-import {Signature} from '@vicons/tabler'
+import {Signature, Wallet} from '@vicons/tabler'
 import { RouterLink } from 'vue-router'
 
 function renderIcon (icon: Component) {
@@ -68,6 +68,20 @@ const menuOptions: MenuOption[] = [
         ),
     key: 'hear-the-hash',
     icon: renderIcon(Signature),
+  },
+  {
+    label: () =>
+        h(
+            RouterLink,
+            {
+              to: {
+                name: 'wallet'
+              }
+            },
+            { default: () => 'Wallet Toolkit' }
+        ),
+    key: 'hear-the-seed',
+    icon: renderIcon(Wallet),
   },
   {
     label: 'Dance Dance Dance',
