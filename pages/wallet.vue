@@ -22,7 +22,7 @@
           <div>Private Key With 0x:
             <n-text code>
               {{wallet.pk}}
-            </n-text><br/>
+            </n-text>
           </div>
         </n-collapse-item>
       </n-collapse>

@@ -1,5 +1,5 @@
 <template>
-  <n-input v-model:value="fnName" type="text" placeholder="function name" style="margin-bottom: 12px" />
+  <n-input v-if="packType === 'function'" v-model:value="fnName" type="text" placeholder="function name" style="margin-bottom: 12px" />
   <n-dynamic-input v-model:value="fnArgs" :on-create="onCreate">
     <template #default="{ value }">
       <div style="display: flex; align-items: center; width: 100%">
@@ -9,14 +9,14 @@
             placeholder="Type"
             :options="typesToOptions"
             style="margin-right: 12px; width: 160px"
-            :status="!value.type ? 'error' : ''"
+            :status="!value.type ? 'error' : 'success'"
         />
         <n-input
             v-model:value="value.value"
             type="text"
             :disabled="!value.type"
             placeholder="Value"
-            :status="!checkArgValue(value.type, value.value) ? 'error' : ''"
+            :status="!checkArgValue(value.type, value.value) ? 'error' : 'success'"
         />
       </div>
     </template>
@@ -24,6 +24,7 @@
   <pre>{{ fnAbiString }}</pre>
   <div>
     <span style="text-decoration: underline blue">{{ first4bytes }}</span>
+    {{packType === 'keccak' ? 'Message Hash: ': ''}}
     <span style="text-decoration: underline darkred">{{lastBytes}}</span>
   </div>
 <!--  <div style="display: flex">-->
@@ -45,11 +46,12 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import {NDynamicInput, NCheckbox, NInputNumber, NInput, NSelect, NTooltip, NPopover} from 'naive-ui'
-import { getFunctionSelector, encodePacked, isAddress, isBytes } from 'viem'
+import { getFunctionSelector, encodePacked, keccak256, isAddress, isBytes } from 'viem'
 import * as _ from "lodash";
 
 function isNumber(e:string) {
-  const pattern = /^[0-9]$/;
+  const pattern = /^[0-9]*$/;
+  console.log('isNumber', pattern, e, pattern.test(e))
   return pattern.test(e)
 }
 
@@ -61,6 +63,9 @@ type argumentType = {
 export default defineComponent({
   components: {
     NDynamicInput, NCheckbox, NInputNumber, NInput, NSelect, NTooltip, NPopover
+  },
+  props: {
+    packType: { type: String, default: 'function' }
   },
   methods: {
     checkArgValue(type:string, value:string) {
@@ -114,9 +119,16 @@ export default defineComponent({
     },
     lastBytes(): string {
       if (!this.isArgsValid) {
+        this.$emit('packed', '')
         return ''
       }
-      return encodePacked(this.fnArgs.map((v) => v.type), this.fnArgs.map((v) => v.value)).substring(2)
+      const packed = encodePacked(this.fnArgs.map((v) => v.type), this.fnArgs.map((v) => v.value))
+      if (this.packType === 'keccak' && packed.length > 2) {
+        const hashPacked = keccak256(packed)
+        this.$emit('packed', hashPacked)
+        return hashPacked
+      }
+      return packed.substring(2)
     },
     typesToOptions(): any[] {
       return this.argTypes.map((argType) => {
@@ -145,6 +157,11 @@ export default defineComponent({
         },
         {
           label: 'string',
+          value: 'string',
+          checkFn: true,
+        },
+        {
+          label: 'bytes',
           value: 'string',
           checkFn: true,
         },

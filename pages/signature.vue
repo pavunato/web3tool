@@ -21,27 +21,37 @@
         <n-tab-pane name="manual" tab="Message">
           <n-space vertical>
             <n-input v-model:value="messageInput" type="text" placeholder="Message to sign" />
-            <div>Signature: {{signature}}</div>
           </n-space>
         </n-tab-pane>
-        <n-tab-pane name="parse" tab="Typed Data">
-          Sign Typed Data
+<!--        <n-tab-pane name="parse" tab="Typed Data">-->
+<!--          Sign Typed Data-->
+<!--        </n-tab-pane>-->
+        <n-tab-pane name="pack" tab="Packed Keccak 256">
+          PackedKeccak256
+          <manual-a-b-i :pack-type="'keccak'" @packed="(msg) => messageInput = msg"/>
         </n-tab-pane>
       </n-tabs>
-      <n-card title="Code Example" style="margin-bottom: 16px">
-        <n-tabs type="line" animated>
-          <n-tab-pane name="golang" tab="Golang">
-            <div style="overflow: auto">
-              <n-code :code="gocode" :hljs=hljs language="golang" show-line-numbers />
-            </div>
-          </n-tab-pane>
-          <n-tab-pane name="cpp" tab="C++">
-            <div style="overflow: auto">
-              <n-code :code="code" :hljs=hljs language="cpp" show-line-numbers />
-            </div>
-          </n-tab-pane>
-        </n-tabs>
-      </n-card>
+<!--      <n-card title="Code Example" style="margin-bottom: 16px">-->
+<!--        <n-tabs type="line" animated>-->
+<!--          <n-tab-pane name="golang" tab="Golang">-->
+<!--            <div style="overflow: auto">-->
+<!--              <n-code :code="gocode" :hljs=hljs language="golang" show-line-numbers />-->
+<!--            </div>-->
+<!--          </n-tab-pane>-->
+<!--          <n-tab-pane name="cpp" tab="C++">-->
+<!--            <div style="overflow: auto">-->
+<!--              <n-code :code="code" :hljs=hljs language="cpp" show-line-numbers />-->
+<!--            </div>-->
+<!--          </n-tab-pane>-->
+<!--        </n-tabs>-->
+<!--      </n-card>-->
+    </n-space>
+
+
+    <n-space>Signature:
+      <n-text code>
+        {{signature}}
+      </n-text>
     </n-space>
   </n-card>
 </template>
@@ -52,7 +62,7 @@
 }
 </style>
 <script setup lang="ts">
-import {NCard, NInput, NSpace, NTabPane, NTabs, NCode} from 'naive-ui'
+import {NCard, NInput, NSpace, NTabPane, NTabs, NCode, NText} from 'naive-ui'
 import {ref} from 'vue'
 
 import {generatePrivateKey, privateKeyToAccount} from 'viem/accounts'
@@ -148,11 +158,14 @@ func main() {
 
   watchEffect(async () => {
     if (!isValidPrivateKey.value) {
+      signature.value = ''
       return
     }
     if (!messageInput.value) {
+      signature.value = ''
       return
     }
+    console.log('messageInput', messageInput)
     signature.value = await privateKeyToAccount(privateKey.value).signMessage({message:{raw: toBytes(messageInput.value)}})
   })
 </script>
