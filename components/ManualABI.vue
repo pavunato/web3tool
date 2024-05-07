@@ -51,7 +51,6 @@ import * as _ from "lodash";
 
 function isNumber(e:string) {
   const pattern = /^[0-9]*$/;
-  console.log('isNumber', pattern, e, pattern.test(e))
   return pattern.test(e)
 }
 
@@ -162,8 +161,8 @@ export default defineComponent({
         },
         {
           label: 'bytes',
-          value: 'string',
-          checkFn: true,
+          value: 'bytes',
+          checkFn: 'isBytes',
         },
         {
           label: "uint256",
