@@ -46,11 +46,16 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import {NDynamicInput, NCheckbox, NInputNumber, NInput, NSelect, NTooltip, NPopover} from 'naive-ui'
-import { getFunctionSelector, encodePacked, keccak256, isAddress, isBytes } from 'viem'
+import { getFunctionSelector, encodePacked, keccak256, isAddress } from 'viem'
 import * as _ from "lodash";
 
 function isNumber(e:string) {
   const pattern = /^[0-9]*$/;
+  return pattern.test(e)
+}
+
+function isByteString(e:string) {
+  const pattern = /^(0x)?[A-Fa-f0-9]+$/;
   return pattern.test(e)
 }
 
@@ -162,7 +167,7 @@ export default defineComponent({
         {
           label: 'bytes',
           value: 'bytes',
-          checkFn: 'isBytes',
+          checkFn: 'isByteString',
         },
         {
           label: "uint256",
