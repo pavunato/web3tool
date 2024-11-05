@@ -31,20 +31,20 @@
           <manual-a-b-i :pack-type="'keccak'" @packed="(msg) => messageInput = msg"/>
         </n-tab-pane>
       </n-tabs>
-<!--      <n-card title="Code Example" style="margin-bottom: 16px">-->
-<!--        <n-tabs type="line" animated>-->
-<!--          <n-tab-pane name="golang" tab="Golang">-->
-<!--            <div style="overflow: auto">-->
-<!--              <n-code :code="gocode" :hljs=hljs language="golang" show-line-numbers />-->
-<!--            </div>-->
-<!--          </n-tab-pane>-->
-<!--          <n-tab-pane name="cpp" tab="C++">-->
-<!--            <div style="overflow: auto">-->
-<!--              <n-code :code="code" :hljs=hljs language="cpp" show-line-numbers />-->
-<!--            </div>-->
-<!--          </n-tab-pane>-->
-<!--        </n-tabs>-->
-<!--      </n-card>-->
+     <n-card title="Code Example" style="margin-bottom: 16px">
+       <n-tabs type="line" animated>
+         <n-tab-pane name="golang" tab="Golang">
+           <div style="overflow: auto">
+             <n-code :code="gocode" language="golang" show-line-numbers />
+           </div>
+         </n-tab-pane>
+         <n-tab-pane name="cpp" tab="C++">
+           <div style="overflow: auto">
+             <n-code :code="code" language="cpp" show-line-numbers />
+           </div>
+         </n-tab-pane>
+       </n-tabs>
+     </n-card>
     </n-space>
 
 
@@ -73,6 +73,8 @@ import {mainnet} from 'viem/chains'
     chain: mainnet,
     transport: http(),
   })
+
+  // const hljs = ref($) // Define hljs
 
   const privateKey = useState('privateKey', generatePrivateKey)
   const messageInput = ref('')

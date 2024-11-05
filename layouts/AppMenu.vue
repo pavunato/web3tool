@@ -80,7 +80,21 @@ const menuOptions: MenuOption[] = [
             },
             { default: () => 'Wallet Toolkit' }
         ),
-    key: 'hear-the-seed',
+    key: 'wallet',
+    icon: renderIcon(Wallet),
+  },
+  {
+    label: () =>
+        h(
+            RouterLink,
+            {
+              to: {
+                name: 'ton'
+              }
+            },
+            { default: () => 'Ton Wallet Toolkit' }
+        ),
+    key: 'ton-wallet',
     icon: renderIcon(Wallet),
   },
   {

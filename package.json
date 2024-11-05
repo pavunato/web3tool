@@ -18,6 +18,7 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
+    "@ton/crypto": "^3.3.0",
     "@types/lodash": "^4.14.202",
     "@vicons/ionicons5": "^0.12.0",
     "highlight.js": "^11.9.0",
