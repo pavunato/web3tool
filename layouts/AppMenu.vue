@@ -33,7 +33,7 @@ import {h} from 'vue'
 import {NIcon, NSpace, NSwitch, NLayout, NLayoutSider, NMenu} from 'naive-ui'
 import type {MenuOption} from 'naive-ui'
 import {BookmarkOutline, CaretDownOutline, BarcodeOutline} from '@vicons/ionicons5'
-import {Signature, Wallet} from '@vicons/tabler'
+import {Signature, Wallet, FileCode} from '@vicons/tabler'
 import { RouterLink } from 'vue-router'
 
 function renderIcon (icon: Component) {
@@ -78,57 +78,57 @@ const menuOptions: MenuOption[] = [
                 name: 'wallet'
               }
             },
-            { default: () => 'Wallet Toolkit' }
+            { default: () => 'Wallets' }
         ),
     key: 'hear-the-seed',
     icon: renderIcon(Wallet),
-  },
-  {
-    label: 'Dance Dance Dance',
-    key: 'Dance Dance Dance',
-    children: [
-      {
-        type: 'group',
-        label: 'People',
-        key: 'people',
-        children: [
-          {
-            label: 'Narrator',
-            key: 'narrator'
-          },
-          {
-            label: 'Sheep Man',
-            key: 'sheep-man'
-          }
-        ]
-      },
-      {
-        label: 'Beverage',
-        key: 'beverage',
-        children: [
-          {
-            label: 'Whisky',
-            key: 'whisky',
-            href: 'https://en.wikipedia.org/wiki/Whisky'
-          }
-        ]
-      },
-      {
-        label: 'Food',
-        key: 'food',
-        children: [
-          {
-            label: 'Sandwich',
-            key: 'sandwich'
-          }
-        ]
-      },
-      {
-        label: 'The past increases. The future recedes.',
-        key: 'the-past-increases-the-future-recedes'
-      }
-    ]
   }
+  // {
+  //   label: 'Dance Dance Dance',
+  //   key: 'Dance Dance Dance',
+  //   children: [
+  //     {
+  //       type: 'group',
+  //       label: 'People',
+  //       key: 'people',
+  //       children: [
+  //         {
+  //           label: 'Narrator',
+  //           key: 'narrator'
+  //         },
+  //         {
+  //           label: 'Sheep Man',
+  //           key: 'sheep-man'
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       label: 'Beverage',
+  //       key: 'beverage',
+  //       children: [
+  //         {
+  //           label: 'Whisky',
+  //           key: 'whisky',
+  //           href: 'https://en.wikipedia.org/wiki/Whisky'
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       label: 'Food',
+  //       key: 'food',
+  //       children: [
+  //         {
+  //           label: 'Sandwich',
+  //           key: 'sandwich'
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       label: 'The past increases. The future recedes.',
+  //       key: 'the-past-increases-the-future-recedes'
+  //     }
+  //   ]
+  // }
 ]
 
 export default {
@@ -139,7 +139,7 @@ export default {
   data() {
     return {
       menuOptions,
-      collapsed: true,
+      collapsed: false,
       renderMenuLabel(option: MenuOption) {
         if (typeof option.label === 'function') {
           return option.label()

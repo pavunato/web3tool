@@ -23,12 +23,9 @@
             <n-input v-model:value="messageInput" type="text" placeholder="Message to sign" />
           </n-space>
         </n-tab-pane>
-<!--        <n-tab-pane name="parse" tab="Typed Data">-->
-<!--          Sign Typed Data-->
-<!--        </n-tab-pane>-->
         <n-tab-pane name="pack" tab="EncodePacked">
           packedKeccak256
-          <manual-a-b-i :pack-type="'keccak'" @packed="(msg) => messageInput = msg"/>
+          <manual-a-b-i :pack-type="'keccak'" @packed="(msg: string) => messageInput = msg"/>
         </n-tab-pane>
       </n-tabs>
 <!--      <n-card title="Code Example" style="margin-bottom: 16px">-->
@@ -48,7 +45,7 @@
     </n-space>
 
 
-    <n-space>Signature:
+    <n-space vertical>Signature:
       <n-text code>
         {{signature}}
       </n-text>

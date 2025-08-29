@@ -1,5 +1,5 @@
 <template>
-  <n-page-header subtitle="An utils for developing web3">
+  <n-page-header subtitle="Web3 Devkit for everyone">
     <AppMenuLayout>
       <slot/>
     </AppMenuLayout>
@@ -8,13 +8,13 @@
           href="/"
           style="text-decoration: none; color: inherit"
       >
-        Web3utils.IO
+        Kit3.vercel.app
       </a>
     </template>
     <template #avatar>
-      <n-avatar
+      <!-- <n-avatar
           src="https://i.postimg.cc/QtH920mS/Web3-Utils-Logo-Texture-1.png"
-      />
+      /> -->
     </template>
   </n-page-header>
 </template>
