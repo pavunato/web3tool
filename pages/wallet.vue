@@ -7,7 +7,8 @@
           <b>Seed Phrase:</b>
         </template>
         <template #suffix>
-          <n-button size="small" quaternary circle @click="copyToClipboard(seedphrase)">
+          <n-button size="small" quaternary circle @click="copyToClipboard(seedphrase, 'seedphrase')"
+            :class="{ 'copy-button-inverted': clickedButtons.seedphrase }">
             <template #icon>
               <n-icon>
                 <CopyOutline />
@@ -24,8 +25,9 @@
           <template #header>
             <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
               <span>{{ wallet.address }}</span>
-              <n-button size="small" quaternary circle @click.stop="copyToClipboard(wallet.address)"
-                style="margin-left: auto;">
+              <n-button size="small" quaternary circle
+                @click.stop="copyToClipboard(wallet.address, `address-${wallet.index}`)" style="margin-left: auto;"
+                :class="{ 'copy-button-inverted': clickedButtons[`address-${wallet.index}`] }">
                 <template #icon>
                   <n-icon>
                     <CopyOutline />
@@ -40,7 +42,9 @@
             <n-text code>
               {{ wallet.pk.replace('0x', '') }}
             </n-text>
-            <n-button size="small" quaternary circle @click="copyToClipboard(wallet.pk.replace('0x', ''))">
+            <n-button size="small" quaternary circle
+              @click="copyToClipboard(wallet.pk.replace('0x', ''), `pk-${wallet.index}`)"
+              :class="{ 'copy-button-inverted': clickedButtons[`pk-${wallet.index}`] }">
               <template #icon>
                 <n-icon>
                   <CopyOutline />
@@ -53,7 +57,8 @@
             <n-text code>
               {{ wallet.pk }}
             </n-text>
-            <n-button size="small" quaternary circle @click="copyToClipboard(wallet.pk)">
+            <n-button size="small" quaternary circle @click="copyToClipboard(wallet.pk, `pk-0x-${wallet.index}`)"
+              :class="{ 'copy-button-inverted': clickedButtons[`pk-0x-${wallet.index}`] }">
               <template #icon>
                 <n-icon>
                   <CopyOutline />
@@ -70,6 +75,11 @@
 <style scoped>
 .card-tabs .n-tabs-nav--bar-type {
   padding-left: 4px;
+}
+
+.copy-button-inverted {
+  filter: invert(1);
+  transition: filter 0.1s ease-in-out;
 }
 </style>
 <script setup lang="ts">
@@ -89,6 +99,8 @@ const client = createWalletClient({
 const mnemonic = () => generateMnemonic(english)
 
 const seedphrase = useState('seedphrase', mnemonic)
+const clickedButtons = ref<Record<string, boolean>>({})
+
 const randomAddress = computed(() => {
   if (seedphrase.value === '0x') {
     return ''
@@ -114,10 +126,18 @@ const wallets = computed(() => {
   return accounts
 })
 
-const copyToClipboard = async (text: string) => {
+const copyToClipboard = async (text: string, buttonId: string) => {
   try {
     await navigator.clipboard.writeText(text)
-    // You could add a toast notification here if desired
+
+    // Trigger the inversion effect
+    clickedButtons.value[buttonId] = true
+
+    // Reset the effect after 2 seconds
+    setTimeout(() => {
+      clickedButtons.value[buttonId] = false
+    }, 400)
+
   } catch (err) {
     console.error('Failed to copy text: ', err)
   }
