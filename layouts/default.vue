@@ -1,32 +1,23 @@
 <template>
-  <n-page-header subtitle="Web3 Devkit for everyone">
+  <div>
+    <div class="navbar bg-base-100 shadow mb-4">
+      <div class="flex-1">
+        <a class="btn btn-ghost text-xl" href="/">Kit3.vercel.app</a>
+        <span class="ml-2 opacity-60">Web3 Devkit for everyone</span>
+      </div>
+    </div>
     <AppMenuLayout>
-      <slot/>
+      <slot />
     </AppMenuLayout>
-    <template #title>
-      <a
-          href="/"
-          style="text-decoration: none; color: inherit"
-      >
-        Kit3.vercel.app
-      </a>
-    </template>
-    <template #avatar>
-      <!-- <n-avatar
-          src="https://i.postimg.cc/QtH920mS/Web3-Utils-Logo-Texture-1.png"
-      /> -->
-    </template>
-  </n-page-header>
+  </div>
 </template>
 
 <script lang="ts">
-import {NPageHeader, NAvatar} from 'naive-ui'
 import AppMenuLayout from "@/layouts/AppMenu.vue";
 
 export default {
   components: {
-    AppMenuLayout,
-    NPageHeader, NAvatar
+    AppMenuLayout
   },
   data() {
     return {

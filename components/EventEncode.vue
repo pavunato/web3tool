@@ -1,13 +1,13 @@
 <template>
-  <n-input v-model:value="eventString" type="text" placeholder="Event String" style="margin-bottom: 12px"
-           :status="!isEventStringValid ? 'error' : ''"
+  <input v-model="eventString" type="text" placeholder="Event String"
+         class="input input-bordered w-full mb-3"
+         :class="!isEventStringValid ? 'input-error' : ''"
   />
   <pre>{{ keccak }}</pre>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import {NDynamicInput, NCheckbox, NInputNumber, NInput, NSelect, NTooltip, NPopover} from 'naive-ui'
 import { getEventSelector } from 'viem'
 import * as _ from "lodash";
 
@@ -24,9 +24,6 @@ type argumentType = {
 }
 
 export default defineComponent({
-  components: {
-    NDynamicInput, NCheckbox, NInputNumber, NInput, NSelect, NTooltip, NPopover
-  },
   methods: {
   },
   computed: {

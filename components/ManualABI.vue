@@ -1,26 +1,20 @@
 <template>
-  <n-input v-if="packType === 'function'" v-model:value="fnName" type="text" placeholder="function name" style="margin-bottom: 12px" />
-  <n-dynamic-input v-model:value="fnArgs" :on-create="onCreate">
-    <template #default="{ value }">
-      <div style="display: flex; align-items: center; width: 100%">
-        <n-select
-            v-model:value="value.type"
-            filterable
-            placeholder="Type"
-            :options="typesToOptions"
-            style="margin-right: 12px; width: 160px"
-            :status="!value.type ? 'error' : 'success'"
-        />
-        <n-input
-            v-model:value="value.value"
-            type="text"
-            :disabled="!value.type"
-            placeholder="Value"
-            :status="!checkArgValue(value.type, value.value) ? 'error' : 'success'"
-        />
-      </div>
-    </template>
-  </n-dynamic-input>
+  <input v-if="packType === 'function'" v-model="fnName" type="text" placeholder="function name"
+         class="input input-bordered w-full mb-3" />
+  <div class="space-y-2">
+    <div v-for="(value, idx) in fnArgs" :key="idx" class="flex items-center w-full gap-2">
+      <select v-model="value.type" class="select select-bordered w-40"
+              :class="!value.type ? 'select-error' : ''">
+        <option disabled value="">Type</option>
+        <option v-for="opt in typesToOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
+      </select>
+      <input v-model="value.value" type="text" placeholder="Value" :disabled="!value.type"
+             class="input input-bordered flex-1"
+             :class="!checkArgValue(value.type, value.value) ? 'input-error' : ''" />
+      <button class="btn btn-ghost btn-square" @click="removeArg(idx)">✕</button>
+    </div>
+    <button class="btn btn-sm" @click="addArg">+ Add arg</button>
+  </div>
   <pre>{{ fnAbiString }}</pre>
   <div>
     <span style="text-decoration: underline blue">{{ first4bytes }}</span>
@@ -45,7 +39,6 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import {NDynamicInput, NCheckbox, NInputNumber, NInput, NSelect, NTooltip, NPopover} from 'naive-ui'
 import { getFunctionSelector, encodePacked, keccak256, isAddress } from 'viem'
 import * as _ from "lodash";
 
@@ -65,13 +58,16 @@ type argumentType = {
 }
 
 export default defineComponent({
-  components: {
-    NDynamicInput, NCheckbox, NInputNumber, NInput, NSelect, NTooltip, NPopover
-  },
   props: {
     packType: { type: String, default: 'function' }
   },
   methods: {
+    addArg() {
+      this.fnArgs.push({ type: '', value: '' })
+    },
+    removeArg(index: number) {
+      this.fnArgs.splice(index, 1)
+    },
     checkArgValue(type:string, value:string) {
       if (!type || !value) {
         return false

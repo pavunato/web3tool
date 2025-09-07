@@ -1,17 +1,25 @@
 <template>
-  <n-card title="ABI Encoder" style="margin-bottom: 16px">
-    <n-tabs type="line" animated>
-      <n-tab-pane name="function" tab="Function">
-        <ManualABI />
-      </n-tab-pane>
-      <n-tab-pane name="event" tab="Event">
-        <EventEncode />
-      </n-tab-pane>
-      <n-tab-pane name="parse" tab="Parse ABI">
-        Hey Jude
-      </n-tab-pane>
-    </n-tabs>
-  </n-card>
+  <div class="card bg-base-100 shadow mb-4">
+    <div class="card-body">
+      <h2 class="card-title">ABI Encoder</h2>
+      <div role="tablist" class="tabs tabs-bordered">
+        <a role="tab" :class="['tab', activeTab==='function' && 'tab-active']" @click="activeTab='function'">Function</a>
+        <a role="tab" :class="['tab', activeTab==='event' && 'tab-active']" @click="activeTab='event'">Event</a>
+        <a role="tab" :class="['tab', activeTab==='parse' && 'tab-active']" @click="activeTab='parse'">Parse ABI</a>
+      </div>
+      <div class="mt-4">
+        <div v-if="activeTab==='function'">
+          <ManualABI />
+        </div>
+        <div v-else-if="activeTab==='event'">
+          <EventEncode />
+        </div>
+        <div v-else>
+          Hey Jude
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -19,34 +27,10 @@
   padding-left: 4px;
 }
 </style>
-<script>
-import {
-  NCard, NTabs, NTabPane, NForm, NFormItemRow, NInput, NButton,
-    NDynamicInput, NCheckbox, NInputNumber, NSpace
+<script setup>
+import { ref } from 'vue'
+import ManualABI from '@/components/ManualABI.vue'
+import EventEncode from '@/components/EventEncode.vue'
 
-} from 'naive-ui'
-export default {
-  name: "index",
-  components: {
-    NCard, NTabs, NTabPane, NForm, NFormItemRow, NInput, NButton, NDynamicInput, NCheckbox, NInputNumber, NSpace
-  },
-  data() {
-    return {
-      customValue: ref([
-        {
-          isCheck: true,
-          num: 1,
-          string: 'A String'
-        }
-      ]),
-      onCreate () {
-        return {
-          isCheck: false,
-          num: 1,
-          string: 'A String'
-        }
-      }
-    }
-  }
-}
+const activeTab = ref('function')
 </script>

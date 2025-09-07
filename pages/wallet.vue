@@ -1,75 +1,60 @@
 <template>
-  <n-card title="Wallets" style="margin-bottom: 16px">
-    <n-card :bordered="false" :content-style="{ paddingLeft: 0, paddingRight: 0 }">
-      <n-input v-model:value="seedphrase" type="text" placeholder="Input Seed phrase"
-        :status="!isValidSeedPhrase ? 'error' : 'success'">
-        <template #prefix>
-          <b>Seed Phrase:</b>
-        </template>
-        <template #suffix>
-          <n-button size="small" quaternary circle @click="copyToClipboard(seedphrase, 'seedphrase')"
-            :class="{ 'copy-button-inverted': clickedButtons.seedphrase }">
-            <template #icon>
-              <n-icon>
-                <CopyOutline />
-              </n-icon>
-            </template>
-          </n-button>
-        </template>
-      </n-input>
-    </n-card>
+  <div class="card bg-base-100 shadow mb-4">
+    <div class="card-body">
+      <h2 class="card-title">Wallets</h2>
 
-    <n-card>
-      <n-collapse>
-        <n-collapse-item v-for="wallet in wallets" :key="wallet.index">
-          <template #header>
-            <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
-              <span>{{ wallet.address }}</span>
-              <n-button size="small" quaternary circle
-                @click.stop="copyToClipboard(wallet.address, `address-${wallet.index}`)" style="margin-left: auto;"
-                :class="{ 'copy-button-inverted': clickedButtons[`address-${wallet.index}`] }">
-                <template #icon>
-                  <n-icon>
-                    <CopyOutline />
-                  </n-icon>
-                </template>
-              </n-button>
+      <label class="form-control">
+        <div class="label"><span class="label-text font-semibold">Seed Phrase</span></div>
+        <div class="join w-full">
+          <input v-model="seedphrase" type="text" placeholder="Input Seed phrase" class="input input-bordered join-item w-full"
+                 :class="!isValidSeedPhrase ? 'input-error' : ''" />
+          <button class="btn join-item"
+                  @click="copyToClipboard(seedphrase, 'seedphrase')"
+                  :class="{ 'btn-active': clickedButtons.seedphrase }">
+            {{ clickedButtons.seedphrase ? 'Copied' : 'Copy' }}
+          </button>
+        </div>
+      </label>
+
+      <div class="mt-4 space-y-2">
+        <div v-for="wallet in wallets" :key="wallet.index" class="collapse collapse-arrow bg-base-200">
+          <input type="checkbox" />
+          <div class="collapse-title text-sm sm:text-base font-medium flex items-center gap-2">
+            <span class="truncate">{{ wallet.address }}</span>
+          </div>
+          <div class="collapse-content">
+            <div class="flex items-center gap-2">
+              <span>Address:</span>
+              <code class="bg-base-300 px-2 py-1 rounded break-all">{{ wallet.address }}</code>
+              <button class="btn btn-ghost btn-xs"
+                      @click.stop="copyToClipboard(wallet.address, `address-${wallet.index}`)"
+                      :class="{ 'btn-active': clickedButtons[`address-${wallet.index}`] }">
+                {{ clickedButtons[`address-${wallet.index}`] ? 'Copied' : 'Copy' }}
+              </button>
             </div>
-          </template>
-          <div>Address Index: {{ wallet.index }}</div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span>Private Key:</span>
-            <n-text code>
-              {{ wallet.pk.replace('0x', '') }}
-            </n-text>
-            <n-button size="small" quaternary circle
-              @click="copyToClipboard(wallet.pk.replace('0x', ''), `pk-${wallet.index}`)"
-              :class="{ 'copy-button-inverted': clickedButtons[`pk-${wallet.index}`] }">
-              <template #icon>
-                <n-icon>
-                  <CopyOutline />
-                </n-icon>
-              </template>
-            </n-button>
+            <div class="flex items-center gap-2 mt-2">
+              <span>Private Key:</span>
+              <code class="bg-base-300 px-2 py-1 rounded break-all">{{ wallet.pk.replace('0x', '') }}</code>
+              <button class="btn btn-ghost btn-xs"
+                      @click="copyToClipboard(wallet.pk.replace('0x', ''), `pk-${wallet.index}`)"
+                      :class="{ 'btn-active': clickedButtons[`pk-${wallet.index}`] }">
+                {{ clickedButtons[`pk-${wallet.index}`] ? 'Copied' : 'Copy' }}
+              </button>
+            </div>
+            <div class="flex items-center gap-2 mt-2">
+              <span>Private Key With 0x:</span>
+              <code class="bg-base-300 px-2 py-1 rounded break-all">{{ wallet.pk }}</code>
+              <button class="btn btn-ghost btn-xs"
+                      @click="copyToClipboard(wallet.pk, `pk-0x-${wallet.index}`)"
+                      :class="{ 'btn-active': clickedButtons[`pk-0x-${wallet.index}`] }">
+                {{ clickedButtons[`pk-0x-${wallet.index}`] ? 'Copied' : 'Copy' }}
+              </button>
+            </div>
           </div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span>Private Key With 0x:</span>
-            <n-text code>
-              {{ wallet.pk }}
-            </n-text>
-            <n-button size="small" quaternary circle @click="copyToClipboard(wallet.pk, `pk-0x-${wallet.index}`)"
-              :class="{ 'copy-button-inverted': clickedButtons[`pk-0x-${wallet.index}`] }">
-              <template #icon>
-                <n-icon>
-                  <CopyOutline />
-                </n-icon>
-              </template>
-            </n-button>
-          </div>
-        </n-collapse-item>
-      </n-collapse>
-    </n-card>
-  </n-card>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -83,8 +68,6 @@
 }
 </style>
 <script setup lang="ts">
-import { NCard, NInput, NText, NCollapse, NCollapseItem, NButton, NIcon } from 'naive-ui'
-import { CopyOutline } from '@vicons/ionicons5'
 import { ref } from 'vue'
 
 import { generatePrivateKey, privateKeyToAccount, mnemonicToAccount, generateMnemonic, english } from 'viem/accounts'
@@ -133,10 +116,10 @@ const copyToClipboard = async (text: string, buttonId: string) => {
     // Trigger the inversion effect
     clickedButtons.value[buttonId] = true
 
-    // Reset the effect after 2 seconds
+    // Reset the effect after ~1.2 seconds
     setTimeout(() => {
       clickedButtons.value[buttonId] = false
-    }, 400)
+    }, 1200)
 
   } catch (err) {
     console.error('Failed to copy text: ', err)

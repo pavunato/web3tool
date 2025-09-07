@@ -1,56 +1,44 @@
 <template>
-  <n-card title="Sign Thing">
-    <n-space vertical>
-      <n-input v-model:value="randomAddress"
-               type="text" placeholder="Input Private Key">
-        <template #prefix>
-          <b>Address:</b>
-        </template>
-      </n-input>
-      <n-input v-model:value="privateKey" type="text" placeholder="Input Private Key"
-               :status="!isValidPrivateKey ? 'error' : 'success'"
-      >
-        <template #prefix>
-          <b>Private Key:</b>
-        </template>
-      </n-input>
-    </n-space>
+  <div class="card bg-base-100 shadow">
+    <div class="card-body">
+      <h2 class="card-title">Sign Thing</h2>
 
-    <n-space vertical>
-      <n-tabs type="line" animated pane-style="max-width: 800px">
-        <n-tab-pane name="manual" tab="Message">
-          <n-space vertical>
-            <n-input v-model:value="messageInput" type="text" placeholder="Message to sign" />
-          </n-space>
-        </n-tab-pane>
-        <n-tab-pane name="pack" tab="EncodePacked">
-          packedKeccak256
-          <manual-a-b-i :pack-type="'keccak'" @packed="(msg: string) => messageInput = msg"/>
-        </n-tab-pane>
-      </n-tabs>
-<!--      <n-card title="Code Example" style="margin-bottom: 16px">-->
-<!--        <n-tabs type="line" animated>-->
-<!--          <n-tab-pane name="golang" tab="Golang">-->
-<!--            <div style="overflow: auto">-->
-<!--              <n-code :code="gocode" :hljs=hljs language="golang" show-line-numbers />-->
-<!--            </div>-->
-<!--          </n-tab-pane>-->
-<!--          <n-tab-pane name="cpp" tab="C++">-->
-<!--            <div style="overflow: auto">-->
-<!--              <n-code :code="code" :hljs=hljs language="cpp" show-line-numbers />-->
-<!--            </div>-->
-<!--          </n-tab-pane>-->
-<!--        </n-tabs>-->
-<!--      </n-card>-->
-    </n-space>
+      <div class="flex flex-col gap-3">
+        <label class="form-control">
+          <div class="label"><span class="label-text font-semibold">Address</span></div>
+          <input v-model="randomAddress" type="text" class="input input-bordered w-full" placeholder="Input Address" disabled />
+        </label>
+        <label class="form-control">
+          <div class="label"><span class="label-text font-semibold">Private Key</span></div>
+          <input v-model="privateKey" type="text"
+                 class="input input-bordered w-full"
+                 :class="!isValidPrivateKey ? 'input-error' : ''"
+                 placeholder="Input Private Key" />
+        </label>
+      </div>
 
+      <div class="mt-4">
+        <div role="tablist" class="tabs tabs-bordered max-w-[800px]">
+          <a role="tab" :class="['tab', activeTab==='manual' && 'tab-active']" @click="activeTab='manual'">Message</a>
+          <a role="tab" :class="['tab', activeTab==='pack' && 'tab-active']" @click="activeTab='pack'">EncodePacked</a>
+        </div>
+        <div class="mt-3">
+          <div v-if="activeTab==='manual'" class="flex flex-col gap-2">
+            <input v-model="messageInput" type="text" class="input input-bordered w-full" placeholder="Message to sign" />
+          </div>
+          <div v-else>
+            packedKeccak256
+            <manual-a-b-i :pack-type="'keccak'" @packed="(msg: string) => messageInput = msg" />
+          </div>
+        </div>
+      </div>
 
-    <n-space vertical>Signature:
-      <n-text code>
-        {{signature}}
-      </n-text>
-    </n-space>
-  </n-card>
+      <div class="mt-4">
+        <div class="font-semibold mb-1">Signature:</div>
+        <code class="block bg-base-200 p-2 rounded break-all">{{ signature }}</code>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -59,7 +47,6 @@
 }
 </style>
 <script setup lang="ts">
-import {NCard, NInput, NSpace, NTabPane, NTabs, NCode, NText} from 'naive-ui'
 import {ref} from 'vue'
 
 import {generatePrivateKey, privateKeyToAccount} from 'viem/accounts'
@@ -74,6 +61,7 @@ import {mainnet} from 'viem/chains'
   const privateKey = useState('privateKey', generatePrivateKey)
   const messageInput = ref('')
   const signature = ref('')
+  const activeTab = ref<'manual' | 'pack'>('manual')
   const code = ref(`#include <bits/stdc++.h>
 using namespace std;
 

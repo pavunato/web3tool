@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* Remove input/select/textarea border and outline when focused */
+.input:focus,
+.input:focus-visible,
+.textarea:focus,
+.textarea:focus-visible,
+.select:focus,
+.select:focus-visible {
+  box-shadow: none;
+}
+
+.input.input-bordered:focus,
+.textarea.textarea-bordered:focus,
+.select.select-bordered:focus {
+  border-color: transparent;
+}
